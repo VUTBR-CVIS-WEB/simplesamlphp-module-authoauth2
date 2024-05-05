@@ -113,6 +113,11 @@ class OAuth2 extends Source
      */
     public function authenticate(array &$state): void
     {
+        $entityId = $state['SPMetadata']['entityid'];
+        $config  = $this->config->toArray();
+        $config['clientId'] = $entityId;
+        $this->config = Configuration::loadFromArray($config);
+
         $provider = $this->getProvider($this->config);
 
         // We are going to need the authId in order to retrieve this authentication source later, in the callback
@@ -216,6 +221,11 @@ class OAuth2 extends Source
     {
         $start = microtime(true);
         $providerLabel = $this->getLabel();
+
+        $entityId = $state['SPMetadata']['entityid'];
+        $config  = $this->config->toArray();
+        $config['clientId'] = $entityId;
+        $this->config = Configuration::loadFromArray($config);
 
         $provider = $this->getProvider($this->config);
 
