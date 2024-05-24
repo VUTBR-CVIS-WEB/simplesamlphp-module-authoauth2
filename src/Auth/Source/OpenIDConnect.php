@@ -82,7 +82,31 @@ class OpenIDConnect extends OAuth2
             if (strpos($key, 'oidc:') === 0) {
                 $result[substr($key, 5)] = $value;
             }
+
+            if ($key === 'SPMetadata') {
+                $scopes = [];
+
+                if (array_key_exists('attributes', $value)) {
+                    $scopes += $value['attributes'];
+                }
+
+                if (array_key_exists('attributes.required', $value)) {
+                    foreach ($value['attributes.required'] as $attribute) {
+                        if (!in_array($attribute, $scopes)) {
+                            $scopes[] = $attribute;
+                        }
+                    }
+                }
+
+                // needs to be added because 'scope' will overwrite already loaded configuration
+                $configArr = $this->config->getOptionalArray('urlAuthorizeOptions', []);
+                if (array_key_exists('scope', $configArr)) {
+                    $scopes += $configArr['scope'];
+                }
+                $result['scope'] = $scopes;
+            }
         }
+
         if (array_key_exists('ForceAuthn', $state) && $state['ForceAuthn']) {
             $result['prompt'] = 'login';
         }
