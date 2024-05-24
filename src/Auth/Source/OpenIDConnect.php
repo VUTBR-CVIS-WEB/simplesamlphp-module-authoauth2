@@ -86,8 +86,16 @@ class OpenIDConnect extends OAuth2
             if ($key === 'SPMetadata') {
                 $scopes = [];
 
+                // needs to be added because 'scope' will overwrite already loaded configuration
+                $configArr = $this->config->getOptionalArray('urlAuthorizeOptions', []);
+                if (array_key_exists('scope', $configArr)) {
+                    $scopes += $configArr['scope'];
+                }
+
                 if (array_key_exists('attributes', $value)) {
-                    $scopes += $value['attributes'];
+                    foreach ($value['attributes'] as $attribute) {
+                        $scopes[] = $attribute;
+                    }
                 }
 
                 if (array_key_exists('attributes.required', $value)) {
@@ -98,11 +106,6 @@ class OpenIDConnect extends OAuth2
                     }
                 }
 
-                // needs to be added because 'scope' will overwrite already loaded configuration
-                $configArr = $this->config->getOptionalArray('urlAuthorizeOptions', []);
-                if (array_key_exists('scope', $configArr)) {
-                    $scopes += $configArr['scope'];
-                }
                 $result['scope'] = $scopes;
             }
         }
