@@ -130,6 +130,12 @@ class OAuth2 extends Source
 
         $options = $this->config->getOptionalArray('urlAuthorizeOptions', []);
         $options = array_merge($options, $this->getAuthorizeOptionsFromState($state));
+
+        // map oid and urn:mace to names (scopes)
+        $config = ['oid2name', 'urn2name'];
+        $attributeScopeMap = new Module\authoauth2\ProcessingFilter\AttributeScopeMap($config);
+        $options['scope'] = $attributeScopeMap->process($options['scope']);
+
         // Add a prefix to tell we are the intended recipient for a redirect URI if the redirect URI was customized
         $options['state'] = self::STATE_PREFIX . '|' . $stateID;
         $authorizeURL = $provider->getAuthorizationUrl($options);
