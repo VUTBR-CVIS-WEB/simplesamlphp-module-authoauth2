@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleSAML\Module\authoauth2;
+namespace SimpleSAML\Module\authoauth2\Controller;
 
 use SimpleSAML\HTTP\RunnableResponse;
 use SimpleSAML\Module\authoauth2\Auth\Source\OpenIDConnect;
