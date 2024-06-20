@@ -27,6 +27,9 @@ class OpenIDConnect extends OAuth2
     public const STAGE_LOGOUT = 'authouath2:logout';
     protected static string $defaultProviderClass = OpenIDConnectProvider::class;
 
+    /** Redirect to OpenID provider during logout flow. */
+    public static bool $redirectToOp = true;
+
     /**
      * Get the provider to use to talk to the OAuth2 server.
      * Only visible for testing
@@ -148,6 +151,10 @@ class OpenIDConnect extends OAuth2
      */
     public function logout(array &$state): void
     {
+        if (!self::$redirectToOp) {
+            return;
+        }
+
         $providerLabel = $this->getLabel();
         if (array_key_exists('oidc:localLogout', $state) && $state['oidc:localLogout'] === true) {
             Logger::debug("authoauth2: $providerLabel OP initiated logout");
