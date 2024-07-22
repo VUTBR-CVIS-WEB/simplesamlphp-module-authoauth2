@@ -132,7 +132,11 @@ class OAuth2 extends Source
         $options = array_merge($options, $this->getAuthorizeOptionsFromState($state));
 
         // map oid and urn:mace to names (scopes)
-        $config = ['oid2name', 'urn2name'];
+        $config = [
+            'oid2name',
+            'urn2name',
+            'urn:oid:1.3.6.1.4.1.311.20.2.3' => 'upn' // upn mapping doesn't exist in simplesamlphp mapping arrays
+        ];
         $attributeScopeMap = new Module\authoauth2\ProcessingFilter\AttributeScopeMap($config);
         $options['scope'] = $attributeScopeMap->process($options['scope']);
 
