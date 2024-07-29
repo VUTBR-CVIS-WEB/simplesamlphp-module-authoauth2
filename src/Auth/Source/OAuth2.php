@@ -135,7 +135,9 @@ class OAuth2 extends Source
         $config = [
             'oid2name',
             'urn2name',
-            'urn:oid:1.3.6.1.4.1.311.20.2.3' => 'upn' // upn mapping doesn't exist in simplesamlphp mapping arrays
+            // upn and unstructuredName mapping doesn't exist in simplesamlphp mapping arrays
+            'urn:oid:1.3.6.1.4.1.311.20.2.3' => 'upn',
+            'urn:oid:1.2.840.113549.1.9.2' => 'unstructuredName',
         ];
         $attributeScopeMap = new Module\authoauth2\ProcessingFilter\AttributeScopeMap($config);
         $options['scope'] = $attributeScopeMap->process($options['scope']);
