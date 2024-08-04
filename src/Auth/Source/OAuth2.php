@@ -68,7 +68,6 @@ class OAuth2 extends Source
      */
     public function __construct(array $info, array $config)
     {
-
         // Call the parent constructor first, as required by the interface
         parent::__construct($info, $config);
         if (array_key_exists('template', $config)) {
@@ -139,6 +138,16 @@ class OAuth2 extends Source
         ];
         $attributeScopeMap = new Module\authoauth2\ProcessingFilter\AttributeScopeMap($config);
         $options['scope'] = $attributeScopeMap->process($options['scope']);
+
+        // send only supported attributes by auth server
+        $filePath = $this->config->getString('attribute_filepath');
+        include($filePath);
+
+        foreach ($options['scope'] as $key => $scope) {
+            if (!in_array($scope, $supportedAttributes, true)) {
+                unset($options['scope'][$key]);
+            }
+        }
 
         // Add a prefix to tell we are the intended recipient for a redirect URI if the redirect URI was customized
         $options['state'] = self::STATE_PREFIX . '|' . $stateID;
