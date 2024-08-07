@@ -147,13 +147,16 @@ class OpenIDConnect extends OAuth2
      */
     protected function postFinalStep(AccessToken $accessToken, AbstractProvider $provider, array &$state): void
     {
-        $prefix = $this->getAttributePrefix();
+        unset($state['Attributes']['sub']);
+
+       // all information are taken from user info endpoint in OAuth2 class
+//        $prefix = $this->getAttributePrefix();
         $id_token = $accessToken->getValues()['id_token'];
-        $id_token_claims = $this->extraIdTokenAttributes($id_token);
-        $state['Attributes'] = array_merge($this->convertResourceOwnerAttributes(
-            $id_token_claims,
-            $prefix . 'id_token' . '.'
-        ), $state['Attributes']);
+//        $id_token_claims = $this->extraIdTokenAttributes($id_token);
+//        $state['Attributes'] = array_merge($this->convertResourceOwnerAttributes(
+//            $id_token_claims,
+//            $prefix
+//        ), $state['Attributes']);
         $state['id_token'] = $id_token;
         $state['PersistentAuthData'][] = 'id_token';
         $state['LogoutState'] = ['id_token' => $id_token];
