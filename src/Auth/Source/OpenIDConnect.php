@@ -122,7 +122,7 @@ class OpenIDConnect extends OAuth2
                 // needs to be added because 'scope' will overwrite already loaded configuration
                 $configArr = $this->config->getOptionalArray('urlAuthorizeOptions', []);
                 if (array_key_exists('scope', $configArr)) {
-                    $scopes += $configArr['scope'];
+                    $scopes = array_merge($scopes, $configArr['scope']);
                 }
 
                 $result['scope'] = $scopes;
@@ -149,7 +149,8 @@ class OpenIDConnect extends OAuth2
     {
         unset($state['Attributes']['sub']);
 
-       // all information are taken from user info endpoint in OAuth2 class
+        // all information are taken from user info endpoint in OAuth2 class
+        // @todo remove calling user info endpoint in OAuth2 class, parse id token instead
 //        $prefix = $this->getAttributePrefix();
         $id_token = $accessToken->getValues()['id_token'];
 //        $id_token_claims = $this->extraIdTokenAttributes($id_token);
