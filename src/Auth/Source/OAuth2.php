@@ -132,9 +132,9 @@ class OAuth2 extends Source
 
         // map oid and urn:mace to names (scopes)
         $config = [
-            'authoauth2:oid2name',
             'oid2name',
             'urn2name',
+            'authoauth2:oid2name',
         ];
         $attributeScopeMap = new Module\authoauth2\ProcessingFilter\AttributeScopeMap($config);
         $options['scope'] = $attributeScopeMap->process($options['scope']);
