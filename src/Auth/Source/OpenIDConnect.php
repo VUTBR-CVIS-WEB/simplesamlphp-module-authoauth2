@@ -129,12 +129,14 @@ class OpenIDConnect extends OAuth2
             }
         }
 
-        if (array_key_exists('ForceAuthn', $state) && $state['ForceAuthn']) {
-            $result['prompt'] = 'login';
-        }
-        if (array_key_exists('isPassive', $state) && $state['isPassive']) {
-            $result['prompt'] = 'none';
-        }
+        // we don't want this parameter for SAML SPs
+//        if (array_key_exists('ForceAuthn', $state) && $state['ForceAuthn']) {
+//            $result['prompt'] = 'login';
+//        }
+//        if (array_key_exists('isPassive', $state) && $state['isPassive']) {
+//            $result['prompt'] = 'none';
+//        }
+
         return $result;
     }
 
